@@ -18,7 +18,7 @@ package main
 import (
     "context.Context"
     "github.com/magefile/mage/mg"
-    svc "github.com/swdunlop/mage-svc.go"
+    svc "github.com/swdunlop/mage-svc"
 )
 
 // Restart stops then starts a local NATS service for testing.

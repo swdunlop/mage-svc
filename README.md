@@ -1,4 +1,7 @@
 # Starting and Stopping Services as Mage Targets
+[![Go Reference](https://pkg.go.dev/badge/github.com/swdunlop/mage-svc.svg)](https://pkg.go.dev/github.com/swdunlop/mage-svc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/swdunlop/mage-svc)](https://goreportcard.com/report/github.com/swdunlop/mage-svc)
+[![Built with Mage](https://magefile.org/badge.svg)](https://magefile.org)
 
 [Mage](https://magefile.org) is a build tool that supports writing targets in Go.  This package supports configuring
 local services with local start and stop Mage targets.
@@ -14,7 +17,7 @@ package main
 
 import (
     "context.Context"
-
+    "github.com/magefile/mage/mg"
     svc "github.com/swdunlop/mage-svc.go"
 )
 

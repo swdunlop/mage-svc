@@ -27,9 +27,12 @@ import (
 func New(name string, options ...Option) Interface {
 	cfg := config{
 		name: name,
-	} // TODO: let users configure this directory.
+	}
 	for _, option := range options {
 		option(&cfg)
+	}
+	if cfg.run.name == `` {
+		panic(fmt.Errorf(`services expect exactly one run option`))
 	}
 	if cfg.pidFile != `` {
 		// leave it alone.
@@ -122,6 +125,8 @@ func Check(checks ...func(ctx context.Context) error) Option {
 	}
 }
 
+// ErrNotReady indicates that the service is not (yet) ready.  This is returned by functions used by Check to test if
+// the service is fully ready.
 type ErrNotReady struct{}
 
 func (ErrNotReady) Error() string { return `service is not ready` }
@@ -140,6 +145,7 @@ func Env(environment ...string) Option {
 	}
 }
 
+// An Option improves the configuration.
 type Option func(*config)
 
 type config struct {
@@ -378,16 +384,19 @@ func (nfo *Status) String() string {
 	return buf.String()
 }
 
+// start projects starting the configuration as a Mage target.
 type start struct{ config }
 
 func (cfg *start) Name() string                  { return `start` }
 func (cfg *start) Run(ctx context.Context) error { return cfg.start(ctx) }
 
+// stop projects stopping the configuration as a Mage target.
 type stop struct{ config }
 
 func (cfg *stop) Name() string                  { return `stop` }
 func (cfg *stop) Run(ctx context.Context) error { return cfg.stop(ctx) }
 
+// getSysinfo gets system information from x/sys/unix exactly once.
 func getSysinfo() (*unix.Sysinfo_t, error) {
 	getSysinfoOnce.Do(func() {
 		sysinfoErr = unix.Sysinfo(&sysinfo)
